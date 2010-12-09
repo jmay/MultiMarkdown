@@ -1052,6 +1052,13 @@ sub _DoHeaders {
 			$header = _RunSpanGamut($2);
 			$header =~ s/^\s*//s;
 			
+
+      my $classString = "";
+      if ($header =~ /^\{(\w+)\}\s*(.*)/) {
+        $classString = " class=\"$1\"";
+        $header = $2;
+      }
+
 			if ($label ne "") {
 				$g_crossrefs{$label} = "#$label";
 				$g_titles{$label} = _StripHTML($header);
@@ -1060,7 +1067,7 @@ sub _DoHeaders {
 				$idString = "";
 			}
 
-			"<h$h_level$idString>"  .  $header  .  "</h$h_level>\n\n";
+			"<h$h_level$classString$idString>"  .  $header  .  "</h$h_level>\n\n";
 		}egmx;
 
 	return $text;
@@ -1438,7 +1445,14 @@ sub _FormParagraphs {
 	foreach (@grafs) {
 		unless (defined( $g_html_blocks{$_} )) {
 			$_ = _RunSpanGamut($_);
-			s/^([ \t]*)/<p>/;
+
+      my $classString = "";
+      if (/^\{(\w+)\}\s*(.*)/) {
+        $classString = " class=\"$1\"";
+        $_ = $2;
+      }
+
+			s/^([ \t]*)/<p$classString>/;
 			$_ .= "</p>";
 		}
 	}
