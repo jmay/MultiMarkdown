@@ -113,7 +113,7 @@ my %g_titles= ();
 my %g_html_blocks = ();
 my %g_metadata = ();
 my %g_metadata_newline = ();
-my %g_crossrefs = ();
+my %g_crossrefs = (); # for internal references to headers and images (ids are auto-generated from the text if not explicitly provided)
 my %g_footnotes = ();
 my %g_attributes = ();
 my @g_used_footnotes = ();
@@ -733,7 +733,7 @@ sub _DoAnchors {
 				$title =~ s!  _ !$g_escape_table{'_'}!gx;
 				$result .=  " title=\"$title\"";
 			}
-			$result .= _DoAttributes($label);
+			$result .= _DoAttributes($link_id); # use the link_id, not the label, otherwise extended attributes won't work
 			$result .= ">$link_text</a>";
 		} elsif (defined $g_crossrefs{$label}) {
 			my $url = $g_crossrefs{$label};
